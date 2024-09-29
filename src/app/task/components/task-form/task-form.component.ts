@@ -47,7 +47,7 @@ export class TaskFormComponent implements OnInit {
       title: ['', Validators.required], // The title of the task
       deadline: ['', Validators.required], // The deadline for the task
       status: ['PENDING'], // The status of the task (PENDING or COMPLETED)
-      users: this.fb.array([], [this.uniqueNamesValidator]) // A FormArray of users and custom validator for unique names
+      users: this.fb.array([], [Validators.required, this.uniqueNamesValidator]) // A FormArray of users and custom validator for unique names
     });
   }
 
