@@ -1,0 +1,11 @@
+<div class="flex flex-col px-4">
+  <div>- {{ person.fullName }} ({{ person.age }})</div>
+  <div class="flex">
+    <label for="" class="text-sm text-gray-500">Habilidades:</label>
+    <ng-container *ngFor="let skill of person.skills; let i = index">
+      <span class="text-sm px-1">
+        {{ skill.name }}<span *ngIf="i !== person.skills.length - 1">,</span>
+      </span>
+    </ng-container>
+  </div>
+</div>

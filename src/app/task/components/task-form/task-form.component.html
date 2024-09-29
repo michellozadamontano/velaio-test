@@ -1,0 +1,185 @@
+<div class="flex space-y-6 max-w-4xl mx-auto p-6">
+  <h3>
+    {{ title }}
+  </h3>
+</div>
+<form
+  [formGroup]="taskForm"
+  (ngSubmit)="onSubmit()"
+  class="space-y-6 max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg"
+>
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Título</mat-label>
+      <input
+        matInput
+        id="title"
+        formControlName="title"
+        placeholder="Entre el titulo de la tarea"
+      />
+      <mat-error
+        *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched"
+      >
+        El titulo es requerido.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Fecha Límite</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="deadline"
+        placeholder="Selecciona la fecha limite"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error
+        *ngIf="
+          taskForm.get('deadline')?.invalid && taskForm.get('deadline')?.touched
+        "
+      >
+        La fecha limite es requerida.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Users Section -->
+  <div formArrayName="users">
+    <div
+      *ngFor="let user of users.controls; let userIndex = index"
+      [formGroupName]="userIndex"
+      class="border p-4 rounded-lg mb-4 bg-gray-50"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Full Name -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Nombre Completo</mat-label>
+            <input
+              matInput
+              formControlName="fullName"
+              placeholder="Entre el nombre completo"
+            />
+            <mat-error
+              *ngIf="
+                user.get('fullName')?.invalid && user.get('fullName')?.touched
+              "
+            >
+              <span *ngIf="user.get('fullName')?.errors?.['required']"
+                >El nombre completo es requerido.</span
+              >
+              <span *ngIf="user.get('fullName')?.errors?.['minlength']"
+                >El nombre completo debe tener al menos 5 caracteres.</span
+              >
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Age -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Edad</mat-label>
+            <input
+              matInput
+              formControlName="age"
+              type="number"
+              placeholder="Entre la edad"
+            />
+            <mat-error
+              *ngIf="user.get('age')?.invalid && user.get('age')?.touched"
+            >
+              <span *ngIf="user.get('age')?.errors?.['required']"
+                >La edad es requerida.</span
+              >
+              <span *ngIf="user.get('age')?.errors?.['min']"
+                >La edad tiene que ser un número mayor o igual a 18 años.</span
+              >
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div formArrayName="skills" class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Habilidades</label
+        >
+        <div class="space-y-2">
+          <div
+            *ngFor="
+              let skill of getSkills(userIndex).controls;
+              let skillIndex = index
+            "
+            [formGroupName]="skillIndex"
+            class="flex items-center space-x-2"
+          >
+            <mat-form-field appearance="fill" class="flex-1">
+              <mat-label>Habilidad</mat-label>
+              <input matInput formControlName="name" placeholder="Habilidad" />
+              <mat-error
+                *ngIf="skill.get('name')?.invalid && skill.get('name')?.touched"
+              >
+                La habilidad es requerida.
+              </mat-error>
+            </mat-form-field>
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="removeSkill(userIndex, skillIndex)"
+            >
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+        <mat-error
+          *ngIf="getSkills(userIndex).invalid && getSkills(userIndex).touched"
+        >
+          Al menos una habilidad es requerida.
+        </mat-error>
+        <button
+          mat-stroked-button
+          color="primary"
+          type="button"
+          class="mt-2"
+          (click)="addSkill(userIndex)"
+        >
+          <mat-icon>add</mat-icon> Adiciona habilidad
+        </button>
+      </div>
+      <!-- Remove User Button -->
+      <button
+        mat-stroked-button
+        color="warn"
+        type="button"
+        class="mt-4"
+        (click)="removeUser(userIndex)"
+      >
+        <mat-icon>delete</mat-icon> Eliminar persona
+      </button>
+    </div>
+  </div>
+
+  <!-- Add User Button -->
+  <div class="flex justify-end">
+    <button mat-raised-button color="primary" type="button" (click)="addUser()">
+      <mat-icon>add</mat-icon> Adicionar Persona
+    </button>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="flex justify-between">
+    <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      [disabled]="taskForm.invalid"
+    >
+      <mat-icon>save</mat-icon> Guardar Tarea
+    </button>
+  </div>
+</form>

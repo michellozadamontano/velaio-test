@@ -1,0 +1,7 @@
+<div class="container">
+  <app-task-form
+    [title]="title"
+    (onSaveTask)="onSubmit($event)"
+    (onCancelTask)="onCancel()"
+  ></app-task-form>
+</div>

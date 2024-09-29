@@ -1,0 +1,63 @@
+<div class="container flex flex-col md:items-center">
+  <div *ngIf="loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="flex justify-between w-2/4">
+    <div>
+      <h4>Filtrar por Estados</h4>
+      <mat-form-field>
+        <mat-label>Estados</mat-label>
+        <mat-select
+          [(value)]="selectedStatus"
+          (selectionChange)="filterTasks($event.value)"
+        >
+          <mat-option *ngFor="let item of statuses" [value]="item.value">
+            {{ item.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" (click)="addTasks()">
+        Adicionar Tarea
+      </button>
+    </div>
+  </div>
+  <div
+    class="flex flex-col justify-center w-full md:w-2/4 mb-8"
+    *ngFor="let task of selectTaskList$ | async"
+  >
+    <mat-card
+      [ngStyle]="{
+        'background-color':
+          task.status === 'COMPLETED' ? 'rgb(209 213 219)' : ''
+      }"
+    >
+      <mat-card-header>
+        <div class="flex justify-between w-full">
+          <p>-{{ task.title }} - {{ task.deadline | date : "dd/MM/yyyy" }}</p>
+          <section class="example-section">
+            <mat-checkbox
+              class="flex items-center justify-center h-14"
+              [labelPosition]="'after'"
+              [disabled]="task.status === 'COMPLETED'"
+              [checked]="task.status === 'COMPLETED'"
+              (change)="markAsCompleted(task)"
+            >
+              Completed
+            </mat-checkbox>
+          </section>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="flex flex-col">
+          <label for="" class="text-sm text-gray-500"
+            >Personas Asociadas:</label
+          >
+          <app-person *ngFor="let person of task.users" [person]="person">
+          </app-person>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
