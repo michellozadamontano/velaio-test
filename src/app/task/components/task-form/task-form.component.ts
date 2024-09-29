@@ -78,12 +78,20 @@ export class TaskFormComponent implements OnInit {
     this.users.push(userForm);
   }
 
-  // Remove a user from the users FormArray
+  /**
+   * Remove a user from the users FormArray
+   * @param index The index of the user to be removed
+   */
   removeUser(index: number): void {
+    // Remove the user at the specified index
     this.users.removeAt(index);
   }
 
-  // Get skills FormArray for a specific user
+  /**
+   * Gets the skills FormArray for a specific user
+   * @param userIndex The index of the user in the users FormArray
+   * @returns The skills FormArray for the specified user
+   */
   getSkills(userIndex: number): FormArray {
     return this.users.at(userIndex).get('skills') as FormArray;
   }
