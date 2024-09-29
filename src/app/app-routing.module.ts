@@ -5,6 +5,11 @@ import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'task-list',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: AdminLayoutComponent,
     children: [
       {
